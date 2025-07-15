@@ -21,7 +21,7 @@
                 <div class="card-body p-0">
                     {% if listing.image_urls %}
                         {% set images = listing.image_urls.split(',') %}
-                        <div id="listingCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div id="listingCarousel{{ listing.id }}" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-inner">
                                 {% for image in images %}
                                 <div class="carousel-item {% if loop.first %}active{% endif %}">
@@ -31,11 +31,13 @@
                                 {% endfor %}
                             </div>
                             {% if images|length > 1 %}
-                            <button class="carousel-control-prev" type="button" data-bs-target="#listingCarousel" data-bs-slide="prev">
+                            <button class="carousel-control-prev" type="button" data-bs-target="#listingCarousel{{ listing.id }}" data-bs-slide="prev">
                                 <span class="carousel-control-prev-icon"></span>
+                                <span class="visually-hidden">Previous</span>
                             </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#listingCarousel" data-bs-slide="next">
+                            <button class="carousel-control-next" type="button" data-bs-target="#listingCarousel{{ listing.id }}" data-bs-slide="next">
                                 <span class="carousel-control-next-icon"></span>
+                                <span class="visually-hidden">Next</span>
                             </button>
                             {% endif %}
                         </div>
@@ -184,7 +186,7 @@
                     <!-- Quick Contact Form -->
                     <div class="mb-3">
                         <h6><i class="fas fa-envelope text-primary"></i> Quick Inquiry</h6>
-                        <form method="POST" action="{{ url_for('contact_owner', listing_id=listing.id) }}">
+                        <form method="POST" action="{{ url_for('submit_inquiry', listing_id=listing.id) }}">
                             <div class="mb-2">
                                 <input type="text" class="form-control form-control-sm" name="name" placeholder="Your Name" required>
                             </div>
@@ -200,6 +202,33 @@
                             </button>
                         </form>
                     </div>
+                    <!-- Reserve Form -->
+                    <div class="mb-3">
+                        <h6><i class="fas fa-calendar-check text-primary"></i> Reserve This {{ listing.type.title() }}</h6>
+                        <form action="{{ url_for('reserve', listing_id=listing.id) }}" method="post">
+                            <div class="mb-2">
+                                <input type="text" class="form-control form-control-sm" name="name" placeholder="Your Name" required>
+                            </div>
+                            <div class="mb-2">
+                                <input type="email" class="form-control form-control-sm" name="email" placeholder="Your Email" required>
+                            </div>
+                            <div class="mb-2">
+                                <input type="text" class="form-control form-control-sm" name="phone" placeholder="Your Phone">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small mb-0">Start Date</label>
+                                <input type="date" class="form-control form-control-sm" name="start_date" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label small mb-0">End Date</label>
+                                <input type="date" class="form-control form-control-sm" name="end_date" required>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fas fa-calendar-check"></i> Reserve Now
+                            </button>
+                        </form>
+                    </div>
+
 
                     <!-- Share Buttons -->
                     <div class="border-top pt-3">
